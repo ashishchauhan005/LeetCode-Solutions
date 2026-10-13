@@ -27,6 +27,10 @@ class Solution {
                 odd+=2;
             }
         }
-        return ans;
+        for(int i=0;i<n;i++){
+            nums[i]=ans[i];
+        }
+        System.gc();
+        return nums;
     }
 }
