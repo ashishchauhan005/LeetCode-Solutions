@@ -25,7 +25,7 @@ class Solution {
                 }
             }
         }
-        for(int i=0;i<n;i++){
+        for(int i=0;i<n-1;i++){
             if(i<p_last){
                 ans+=travel[i];
             }
