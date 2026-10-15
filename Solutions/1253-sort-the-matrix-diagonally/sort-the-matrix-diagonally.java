@@ -1,48 +1,30 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 class Solution {
     public int[][] diagonalSort(int[][] mat) {
         int m = mat.length;
         int n = mat[0].length;
         
-        // 1. Sort diagonals starting from the first column (row i, col 0)
+        // Map to store PriorityQueue (Min-Heap) for each diagonal index (row - col)
+        Map<Integer, PriorityQueue<Integer>> diagonals = new HashMap<>();
+        
+        // Step 1: Put all elements into their respective diagonal heaps
         for (int i = 0; i < m; i++) {
-            sortSingleDiagonal(mat, i, 0, m, n);
+            for (int j = 0; j < n; j++) {
+                int diagonalKey = i - j;
+                diagonals.putIfAbsent(diagonalKey, new PriorityQueue<>());
+                diagonals.get(diagonalKey).add(mat[i][j]);
+            }
         }
         
-        // 2. Sort diagonals starting from the first row (row 0, col j)
-        // Start j from 1 because (0,0) was already covered above
-        for (int j = 1; j < n; j++) {
-            sortSingleDiagonal(mat, 0, j, m, n);
+        // Step 2: Poll elements out of the heaps back into the matrix in sorted order
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int diagonalKey = i - j;
+                mat[i][j] = diagonals.get(diagonalKey).poll();
+            }
         }
         
         return mat;
-    }
-    
-    private void sortSingleDiagonal(int[][] mat, int row, int col, int m, int n) {
-        List<Integer> diagonalValues = new ArrayList<>();
-        
-        // Step A: Collect all elements along this diagonal
-        int r = row, c = col;
-        while (r < m && c < n) {
-            diagonalValues.add(mat[r][c]);
-            r++;
-            c++;
-        }
-        
-        // Step B: Sort the collected elements
-        Collections.sort(diagonalValues);
-        
-        // Step C: Write the sorted elements back into the matrix
-        r = row; 
-        c = col;
-        int index = 0;
-        while (r < m && c < n) {
-            mat[r][c] = diagonalValues.get(index++);
-            r++;
-            c++;
-        }
     }
 }
