@@ -1,30 +1,31 @@
-import java.util.*;
-
 class Solution {
     public int[][] diagonalSort(int[][] mat) {
         int m = mat.length;
         int n = mat[0].length;
-        
-        // Map to store PriorityQueue (Min-Heap) for each diagonal index (row - col)
-        Map<Integer, PriorityQueue<Integer>> diagonals = new HashMap<>();
-        
-        // Step 1: Put all elements into their respective diagonal heaps
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                int diagonalKey = i - j;
-                diagonals.putIfAbsent(diagonalKey, new PriorityQueue<>());
-                diagonals.get(diagonalKey).add(mat[i][j]);
-            }
+            sortDiagonal(mat, i, 0, m, n);
         }
-        
-        // Step 2: Poll elements out of the heaps back into the matrix in sorted order
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                int diagonalKey = i - j;
-                mat[i][j] = diagonals.get(diagonalKey).poll();
-            }
+        for (int j = 1; j < n; j++) {
+            sortDiagonal(mat, 0, j, m, n);
         }
-        
         return mat;
+    }
+    private void sortDiagonal(int[][] mat, int row, int col, int m, int n) {
+        List<Integer> diagonal = new ArrayList<>();
+        int r = row, c = col;
+        while (r < m && c < n) {
+            diagonal.add(mat[r][c]);
+            r++;
+            c++;
+        }
+        Collections.sort(diagonal);
+        r = row; 
+        c = col;
+        int index = 0;
+        while (r < m && c < n) {
+            mat[r][c] = diagonal.get(index++);
+            r++;
+            c++;
+        }
     }
 }
