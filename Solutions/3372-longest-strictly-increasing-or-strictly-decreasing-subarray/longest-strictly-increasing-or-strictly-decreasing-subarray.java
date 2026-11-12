@@ -3,7 +3,6 @@ class Solution {
         if (nums == null || nums.length == 0) {
             return 0;
         }
-        
         int n = nums.length;
         int maxLen = 1;
         int incLen = 1;
